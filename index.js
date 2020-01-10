@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+
+const { WebhookClient } = require('dialogflow-fulfillment');
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 require('dotenv').config()
@@ -22,7 +24,22 @@ student = mongoose.model("student",studentSchema);
 
 
 app.use("/getInfo",(req,res)=>{
-	console.log(req)
+	const agent = new WebhookClient({request: request, response: response});
+	
+	var name = agent.parameters['name']
+	var emailq = agent.parameters['email']
+	
+	student.findOne({email : emailq}, (err,result) =>{
+		agent.add("Name : ${result.name}")
+		agent.add("email : ${result.email}")
+		if(result.contact){
+			agent.add("contact : ${result.contact}")
+		}
+		if(result.course){
+			agent.end("course : ${result.course}")
+		}
+	})
+	
 })
 
 
