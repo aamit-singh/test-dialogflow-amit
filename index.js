@@ -1,15 +1,14 @@
-var express = require("express.js");
+var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
 var mongoose = require("mongoose");
-var WebHooks = require('node-webhooks')
 require('dotenv').config()
 
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mydatabase', {useNewUrlParser: true}).then(console.log("connected"));
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true}).then(console.log("connected"));
 var schema = mongoose.Schema;
 var studentSchema = new schema({
 	name : {type: String, required: true},
@@ -22,9 +21,12 @@ var studentSchema = new schema({
 student = mongoose.model("student",studentSchema);
 
 
-var webHooks = new WebHooks({
-	db: './webHooksDB.json'
+app.use("/getInfo",(req,res)=>{
+	console.log(req)
 })
+
+
+
 
 app.use("/",(req,res)=>{
 	res.type('html').status(200)
