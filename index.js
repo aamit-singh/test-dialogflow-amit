@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var bodyparser = require("body-parser");
+var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 require('dotenv').config()
 
@@ -8,7 +8,7 @@ require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true}).then(console.log("connected"));
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 var schema = mongoose.Schema;
 var studentSchema = new schema({
 	name : {type: String, required: true},
