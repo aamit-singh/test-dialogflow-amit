@@ -27,6 +27,7 @@ var webHooks = new WebHooks({
 })
 
 app.use("/",(req,res)=>{
+	res.type('html').status(200)
 	res.send("The server is running");
 })
 
