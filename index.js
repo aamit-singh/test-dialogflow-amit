@@ -26,7 +26,7 @@ student = mongoose.model("student",studentSchema);
 app.post("/getInfo",(req,res)=>{
 	console.log(req.body);
 	console.log(res.body)
-	const agent = new WebhookClient({request: request, response: response});
+	const agent = new WebhookClient({request: req, response: res});
 	console.log(agent)
 	agent.handleRequest((agent)=>{
 		var name = agent.parameters['name']
