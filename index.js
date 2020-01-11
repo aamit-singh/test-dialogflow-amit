@@ -31,7 +31,7 @@ app.post("/getInfo",(req,res)=>{
 	agent.handleRequest((agent)=>{
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
-	
+		if(emailq):{
 		student.findOne({email : emailq}, (err,result) =>{
 			agent.add("Name : "+ result.name)
 			agent.add("email : " + result.email )
@@ -40,7 +40,7 @@ app.post("/getInfo",(req,res)=>{
 			}
 			if(result.course){
 				agent.end("course : "+ result.course )
-			}
+			}}
 		})
 	})
 	
