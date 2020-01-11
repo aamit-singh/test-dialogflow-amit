@@ -47,6 +47,7 @@ app.post("/getInfo",(req,res)=>{
 		
 		})}
 		console.log("exitting")
+		agent.add("these are the results")
 	}).catch((err)=>{
 		if(err){
 			console.log(err)
