@@ -25,19 +25,20 @@ student = mongoose.model("student",studentSchema);
 
 app.post("/getInfo",(req,res)=>{
 	const agent = new WebhookClient({request: request, response: response});
+	agent.handleRequest((agent)=>{
+		var name = agent.parameters['name']
+		var emailq = agent.parameters['email']
 	
-	var name = agent.parameters['name']
-	var emailq = agent.parameters['email']
-	
-	student.findOne({email : emailq}, (err,result) =>{
-		agent.add("Name : "+ result.name)
-		agent.add("email : " + result.email )
-		if(result.contact){
-			agent.add("contact : " + result.contact)
-		}
-		if(result.course){
-			agent.end("course : "+ result.course )
-		}
+		student.findOne({email : emailq}, (err,result) =>{
+			agent.add("Name : "+ result.name)
+			agent.add("email : " + result.email )
+			if(result.contact){
+				agent.add("contact : " + result.contact)
+			}
+			if(result.course){
+				agent.end("course : "+ result.course )
+			}
+		})
 	})
 	
 })
