@@ -27,10 +27,11 @@ app.post("/getInfo",(req,res)=>{
 	console.log(req.body);
 	console.log(res.body)
 	const agent = new WebhookClient({request: req, response: res});
-	console.log(agent)
+	console.log("going well till agent creation")
 	agent.handleRequest((agent)=>{
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
+		console.log("retrieved email")
 		if(emailq):{
 		student.findOne({email : emailq}, (err,result) =>{
 			agent.add("Name : "+ result.name)
@@ -40,8 +41,10 @@ app.post("/getInfo",(req,res)=>{
 			}
 			if(result.course){
 				agent.end("course : "+ result.course )
-			}}
-		})
+			}
+		
+		})}
+		console.log("exitting")
 	})
 	
 })
