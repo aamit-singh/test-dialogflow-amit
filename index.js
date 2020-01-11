@@ -33,8 +33,10 @@ app.post("/getInfo",(req,res)=>{
 		var emailq = agent.parameters['email']
 		console.log("retrieved email")
 		if(emailq){
+			console.log("entered query mongodb")
 		student.findOne({email : emailq}, (err,result) =>{
 			agent.add("Name : "+ result.name)
+			console.log(result)
 			agent.add("email : " + result.email )
 			if(result.contact){
 				agent.add("contact : " + result.contact)
