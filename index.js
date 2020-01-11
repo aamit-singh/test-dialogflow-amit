@@ -32,7 +32,7 @@ app.post("/getInfo",(req,res)=>{
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
 		console.log("retrieved email")
-		if(emailq):{
+		if(emailq){
 		student.findOne({email : emailq}, (err,result) =>{
 			agent.add("Name : "+ result.name)
 			agent.add("email : " + result.email )
