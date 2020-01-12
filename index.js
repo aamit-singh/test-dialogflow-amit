@@ -39,9 +39,10 @@ app.post("/getInfo",(req,res)=>{
 			mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
 		 	{useNewUrlParser: true}).then(console.log('connected')).catch((err)=>{console.log(err)});
 		student.findOne({email : emailq}, (err, result) =>{
-			agent.add("Name : "+ result.name)
+			agent.add("The results are : ")
+			agent.add("Name : "+ agent.parameters['name'])
 			console.log(result)
-			agent.add("email : " + result.email )
+			agent.add("email : " + agent.parameters['email'] )
 			if(result.contact){
 				agent.add("contact : " + result.contact)
 			}
@@ -49,7 +50,7 @@ app.post("/getInfo",(req,res)=>{
 				agent.end("course : "+ result.course )
 			}
 		
-		}).catch((err)=>{console.log(err)})
+		}).then(console.log('hello')).catch((err)=>{console.log(err)})
 		}
 		console.log("exitting")
 	}).catch((err)=>{
