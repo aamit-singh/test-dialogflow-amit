@@ -37,7 +37,9 @@ app.post("/getInfo",(req,res)=>{
 		if(emailq){
 			console.log("entered query mongodb")
 			mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
-		 	{useNewUrlParser: true}).then(console.log('connected')
+		 	{useNewUrlParser: true})
+				.then( ()=>{
+				console.log('connected')
 		student.findOne({email : emailq}, (err, result) =>{
 			
 			if(result && result.contact){
@@ -57,7 +59,9 @@ app.post("/getInfo",(req,res)=>{
 		})
 			.catch((err)=>{
 				console.log(err)
-		})).catch((err)=>{console.log(err)});
+		})
+		})
+				.catch((err)=>{console.log(err)});
 		}
 		console.log("exitting")
 	}).catch((err)=>{
