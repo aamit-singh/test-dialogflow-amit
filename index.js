@@ -53,15 +53,10 @@ async function doit(agent){
 			})
 			console.log("exitting query")
 		}
-	})
-	.catch((err)=>{
-		if(err){
-			console.log(err)
-		}
-	})
-}
+	}
 
-app.post("/getInfo",(req,res)=>{
+
+app.use("/getInfo",(req,res)=>{
 	console.log(req.body);
 	const agent = new WebhookClient({request: req, response: res});
 	console.log("going well till agent creation")
