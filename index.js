@@ -10,7 +10,9 @@ require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.Promise = global.Promise
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
+		 {useNewUrlParser: true}).then(console.log('connected')).catch((err)=>{console.log(err)});
 var schema = mongoose.Schema;
 var studentSchema = new schema({
 	name : {type: String, required: true},
@@ -34,6 +36,8 @@ app.post("/getInfo",(req,res)=>{
 		console.log("retrieved email")
 		if(emailq){
 			console.log("entered query mongodb")
+			mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
+		 	{useNewUrlParser: true}).then(console.log('connected')).catch((err)=>{console.log(err)});
 		student.findOne({email : emailq}, (err,result) =>{
 			agent.add("Name : "+ result.name)
 			console.log(result)
@@ -45,7 +49,8 @@ app.post("/getInfo",(req,res)=>{
 				agent.end("course : "+ result.course )
 			}
 		
-		})}
+		})
+		}
 		console.log("exitting")
 		agent.add("these are the results")
 	}).catch((err)=>{
