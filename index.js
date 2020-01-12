@@ -55,12 +55,14 @@ async function doit(agent){
 		}
 	}
 
+var intentMap = new Map();
+intentMap.set('query', doit);
 
 app.use("/getInfo",(req,res)=>{
 	console.log(req.body);
 	const agent = new WebhookClient({request: req, response: res});
 	console.log("going well till agent creation")
-	agent.handleRequest(doit(agent))
+	agent.handleRequest(intentMap)
 })
 
 
