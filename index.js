@@ -30,18 +30,13 @@ var studentSchema = new schema({
 });
 student = mongoose.model("student",studentSchema);
 
-
-app.post("/getInfo",(req,res)=>{
-	console.log(req.body);
-	const agent = new WebhookClient({request: req, response: res});
-	console.log("going well till agent creation")
-	agent.handleRequest((agent)=>{
+async function doit(agent)=>{
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
 		console.log("retrieved email",name,emailq)
 		if(emailq){
 			console.log("entered query mongodb")
-			student.findOne({email : emailq}, (err, result) =>{
+			await student.findOne({email : emailq}, (err, result) =>{
 				console.log('hello')
 				agent.add("The results are : ")
 				agent.add("Name : "+ agent.parameters['name'])
@@ -52,21 +47,26 @@ app.post("/getInfo",(req,res)=>{
 					agent.add("contact : " + result.contact)
 				}
 				if(result && result.course){
-					agent.end("course : "+ result.course )
+					agent.add("course : "+ result.course )
 				}
 		
 			})
 			console.log("exitting query")
 		}
-	}).catch((err)=>{
+	})
+	.catch((err)=>{
 		if(err){
 			console.log(err)
 		}
 	})
-	
+}
+
+app.post("/getInfo",(req,res)=>{
+	console.log(req.body);
+	const agent = new WebhookClient({request: req, response: res});
+	console.log("going well till agent creation")
+	agent.handleRequest(doit(agent))
 })
-
-
 
 
 app.use("/",(req,res)=>{
