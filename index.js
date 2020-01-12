@@ -38,22 +38,27 @@ async function doit(agent){
 			console.log("entered query mongodb")
 			await student.findOne({email : emailq}, (err, result) =>{
 				console.log('hello')
-				agent.add("The results are : /n Name : "+ agent.parameters['name'] + "/n email: "+ result.email)
+				if(result.length == 0){
+					return 0;
+				}
+				else{
+					agent.add("The results are : \n Name : "+ agent.parameters['name'] + "\n email: "+ result.email)
 				
-				var mess = ""
-				if(result && result.contact){
-					mess = mess + "/n contact : " + result.contact;
+					var mess = ""
+					if(result && result.contact){
+						mess = mess + "\n contact : " + result.contact;
+					}
+					if(result && result.course){
+						mess = mess+ "\n course : "+ result.course;
+					}
+					agent.add(mess)
 				}
-				if(result && result.course){
-					mess = mess+ "/n course : "+ result.course;
-				}
-				agent.add(mess)
 		
 			})
 			console.log("exitting query")
 		}
 		else{
-			return;
+			return 0;
 		}
 	}
 
