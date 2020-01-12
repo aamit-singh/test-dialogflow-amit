@@ -34,24 +34,26 @@ async function doit(agent){
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
 		console.log("retrieved email",name,emailq)
-		if(emailq){
+		if(emailq && name ){
 			console.log("entered query mongodb")
 			await student.findOne({email : emailq}, (err, result) =>{
 				console.log('hello')
-				agent.add("The results are : ")
-				agent.add("Name : "+ agent.parameters['name'])
-				console.log(result)
-				agent.end("email : " + agent.parameters['email'] )
+				agent.add("The results are : /n Name : "+ agent.parameters['name'] + "/n email: "+ result.email)
 				
+				var mess = ""
 				if(result && result.contact){
-					agent.add("contact : " + result.contact)
+					mess = mess + "/n contact : " + result.contact;
 				}
 				if(result && result.course){
-					agent.add("course : "+ result.course )
+					mess = mess+ "/n course : "+ result.course;
 				}
+				agent.add(mess)
 		
 			})
 			console.log("exitting query")
+		}
+		else{
+			return;
 		}
 	}
 
