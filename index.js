@@ -52,7 +52,7 @@ app.post("/getInfo",(req,res)=>{
 				console.log('hello')
 				agent.add("The results are : ")
 				agent.add("Name : "+ agent.parameters['name'])
-				console.log(result)
+				console.log(result,agent)
 				agent.add("email : " + agent.parameters['email'] )
 		})
 			.catch((err)=>{
