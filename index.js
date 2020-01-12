@@ -38,7 +38,7 @@ app.post("/getInfo",(req,res)=>{
 			console.log("entered query mongodb")
 			mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
 		 	{useNewUrlParser: true}).then(console.log('connected')).catch((err)=>{console.log(err)});
-		student.findOne({email : emailq}, (result) =>{
+		student.findOne({email : emailq}, (err, result) =>{
 			agent.add("Name : "+ result.name)
 			console.log(result)
 			agent.add("email : " + result.email )
