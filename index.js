@@ -56,7 +56,8 @@ app.post("/getInfo",(req,res)=>{
 				}
 		
 			})
-		console.log("exitting query")
+			console.log("exitting query")
+		}
 	}).catch((err)=>{
 		if(err){
 			console.log(err)
