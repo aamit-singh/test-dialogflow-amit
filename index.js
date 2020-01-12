@@ -42,7 +42,7 @@ async function doit(agent){
 					return 0;
 				}
 				else{
-					agent.add("The results are : \n Name : "+ agent.parameters['name'] "<br/> email: "+ result.email)
+					agent.add("The results are : \n Name : "+ agent.parameters['name'] + "<br/> email: "+ result.email)
 				
 					var mess = ""
 					if(result && result.contact){
