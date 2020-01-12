@@ -30,7 +30,7 @@ var studentSchema = new schema({
 });
 student = mongoose.model("student",studentSchema);
 
-async function doit(agent)=>{
+async function doit(agent){
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
 		console.log("retrieved email",name,emailq)
