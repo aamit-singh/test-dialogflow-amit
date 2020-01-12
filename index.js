@@ -33,43 +33,30 @@ student = mongoose.model("student",studentSchema);
 
 app.post("/getInfo",(req,res)=>{
 	console.log(req.body);
-	console.log(res.body)
 	const agent = new WebhookClient({request: req, response: res});
 	console.log("going well till agent creation")
 	agent.handleRequest((agent)=>{
 		var name = agent.parameters['name']
 		var emailq = agent.parameters['email']
-		console.log("retrieved email")
+		console.log("retrieved email",name,emailq)
 		if(emailq){
 			console.log("entered query mongodb")
-			mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
-		 	{useNewUrlParser: true})
-				.then( ()=>{
-				console.log('connected')
-		student.findOne({email : emailq}, (err, result) =>{
-			
-			if(result && result.contact){
-				agent.add("contact : " + result.contact)
-			}
-			if(result && result.course){
-				agent.end("course : "+ result.course )
-			}
-		
-		})
-			.then((result)=>{
+			student.findOne({email : emailq}, (err, result) =>{
 				console.log('hello')
 				agent.add("The results are : ")
 				agent.add("Name : "+ agent.parameters['name'])
 				console.log(result)
 				agent.end("email : " + agent.parameters['email'] )
-		})
-			.catch((err)=>{
-				console.log(err)
-		})
-		})
-				.catch((err)=>{console.log(err)});
-		}
-		console.log("exitting")
+				
+				if(result && result.contact){
+					agent.add("contact : " + result.contact)
+				}
+				if(result && result.course){
+					agent.end("course : "+ result.course )
+				}
+		
+			})
+		console.log("exitting query")
 	}).catch((err)=>{
 		if(err){
 			console.log(err)
