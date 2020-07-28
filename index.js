@@ -10,7 +10,16 @@ require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
+mongoose.Promise = global.Promise
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://amit-singh:Amitsingh1%40@cluster0-euwxx.gcp.mongodb.net/test?retryWrites=true&w=majority',
+		 {useNewUrlParser: true}).catch((err)=>{console.log(err)})
+console.log("initialising")
 var schema = mongoose.Schema;
 var studentSchema = new schema({
 	name : {type: String, required: true},
@@ -23,20 +32,36 @@ var studentSchema = new schema({
 student = mongoose.model("student",studentSchema);
 
 
-app.use("/getInfo",(req,res)=>{
-	const agent = new WebhookClient({request: request, response: response});
-	
-	var name = agent.parameters['name']
-	var emailq = agent.parameters['email']
-	
-	student.findOne({email : emailq}, (err,result) =>{
-		agent.add("Name : ${result.name}")
-		agent.add("email : ${result.email}")
-		if(result.contact){
-			agent.add("contact : ${result.contact}")
+app.post("/getInfo",(req,res)=>{
+	console.log(req.body);
+	const agent = new WebhookClient({request: req, response: res});
+	console.log("going well till agent creation")
+	agent.handleRequest((agent)=>{
+		var name = agent.parameters['name']
+		var emailq = agent.parameters['email']
+		console.log("retrieved email",name,emailq)
+		if(emailq){
+			console.log("entered query mongodb")
+			student.findOne({email : emailq}, (err, result) =>{
+				console.log('hello',result)
+				agent.add("The results are : ")
+				agent.add("Name : "+ agent.parameters['name'])
+				console.log(result)
+				agent.end("email : " + agent.parameters['email'] )
+				
+				if(result && result.contact){
+					agent.add("contact : " + result.contact)
+				}
+				if(result && result.course){
+					agent.end("course : "+ result.course )
+				}
+		
+			})
+			console.log("exitting query")
 		}
-		if(result.course){
-			agent.end("course : ${result.course}")
+	}).catch((err)=>{
+		if(err){
+			console.log(err)
 		}
 	})
 	
@@ -48,14 +73,41 @@ app.use("/getInfo",(req,res)=>{
 app.use("/",(req,res)=>{
 	res.type('html').status(200)
 	res.send("The server is running");
+	var newStudent = new student({
+	name : "priya",
+	email : "priya@gmail.com",
+	contact : 1122334455,
+	course : "ug",
+	country : ["India"],
+	dob : null,
+	});
+	
+	async ()=>{	
+	
+		await newStudent.save( (err) => {
+				console.log("entered new student")
+				if(err){
+					console.log(err)
+				}
+			})
+		await student.find({},(err, result) =>{
+					console.log('hello',result)
+					console.log(err)
+					
+					if(result && result.contact){
+						//agent.add("contact : " + result.contact)
+						
+					}
+					if(result && result.course){
+						//agent.end("course : "+ result.course )
+					}
+			
+				})
+		console.log("running")
+	}
+	res.send("")
 })
 
 
 const port = process.env.PORT || 3000;
 app.listen(port);
-
-
-
-
-
-
